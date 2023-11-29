@@ -15,22 +15,29 @@ function initPinchZoom(element) {
         return endDistance / startDistance;
     }
 
-    function getTransform() {
-        // We only include scale in the transform now
-        const scale = getScale();
+    function getTransform(scale) {
+        // Apply the cumulative scale
         return `scale(${scale})`;
     }
 
     function handleGesture() {
-        element.style.transform = getTransform();
+        const scale = currentScale * getScale();
+        element.style.transform = getTransform(scale);
     }
 
-    element.addEventListener('touchstart', e => {
-        if (e.touches.length >= 2) { // Ensure we have two touches
+    function handleTouchStart(e) {
+        if (e.touches.length >= 2) {
             startTouches = e.touches;
             startDistance = getDistance(startTouches);
+            // Calculate the center of the pinch gesture
+            const touchCenterX = (startTouches[0].clientX + startTouches[1].clientX) / 2;
+            const touchCenterY = (startTouches[0].clientY + startTouches[1].clientY) / 2;
+            // Adjust the transform origin to the center of the pinch
+            element.style.transformOrigin = `${touchCenterX}px ${touchCenterY}px`;
         }
-    });
+    }
+
+    element.addEventListener('touchstart', handleTouchStart);
 
     element.addEventListener('touchmove', e => {
         if (e.touches.length >= 2) {
@@ -42,32 +49,34 @@ function initPinchZoom(element) {
 
     element.addEventListener('touchend', () => {
         currentScale *= getScale(); // Store the cumulative scale
-        handleGesture(); // Ensure the scale is applied at the end of the gesture
+        element.style.transform = getTransform(currentScale); // Apply the final scale
     });
 
     element.addEventListener('touchcancel', () => {
         currentScale *= getScale();
-        handleGesture();
+        element.style.transform = getTransform(currentScale);
     });
 
     element.addEventListener('wheel', e => {
         e.preventDefault();
         currentScale = Math.min(Math.max(0.125, currentScale - e.deltaY / 1000), 4);
-        handleGesture();
+        element.style.transform = getTransform(currentScale);
     });
 
     element.addEventListener('dblclick', e => {
         e.preventDefault();
         currentScale = 1; // Reset scaling
-        handleGesture();
+        element.style.transformOrigin = '0 0'; // Reset transform origin
+        element.style.transform = getTransform(currentScale);
     });
 
     element.addEventListener('contextmenu', e => {
         e.preventDefault();
     });
 
-    element.style.transformOrigin = '0 0'; // Sets the origin of transform
-    element.style.transform = getTransform(); // Apply initial transform
+    // Apply initial transform
+    element.style.transformOrigin = '0 0';
+    element.style.transform = getTransform(currentScale);
 
     return element;
 }
