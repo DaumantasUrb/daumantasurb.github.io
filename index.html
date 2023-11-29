@@ -1,23 +1,59 @@
 <html>
 <body>
-<style>
-.pz {
-    height: 300px;
-    width: 300px;
-}
+<link rel="stylesheet" type="text/css" href="style.css"/>
 
-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-
-}
-</style>
-<div class="pz">
-  <img src="https://i.imgur.com/d23lKC6.jpeg" />
+<div class="object-images expandedGallery">
+    <!-- Static Images from 1.jpg to 10.jpg -->
+    <div class="mgallery-element previewable-image" data-index="0">
+        <picture id="pictureContainer0">
+            <img class="mgallery-image" src="1.jpg" alt="Placeholder - Photo no 1" title="Placeholder - Photo no 1" />
+        </picture>
+        <!-- Removed PHP related spinner to be replaced with static content -->
+    </div>
+    <div class="mgallery-element previewable-image" data-index="1">
+        <picture id="pictureContainer1">
+            <img class="mgallery-image" src="2.jpg" alt="Placeholder - Photo no 2" title="Placeholder - Photo no 2" />
+        </picture>
+    </div>
+    <div class="mgallery-element previewable-image" data-index="9">
+        <picture id="pictureContainer9">
+            <img class="mgallery-image" src="10.jpg" alt="Placeholder - Photo no 10" title="Placeholder - Photo no 10" />
+        </picture>
+    </div>
 </div>
+<div class="hide previewGallery">
+    <div class="previewImage" data-index="0">
+        <picture id="previewContainer0">
+            <img
+                style="display: none;"
+                class="preview-image"
+                src="1.jpg"
+            />
+        </picture>
+    </div>
+    <div class="previewImage" data-index="1">
+        <picture id="previewContainer1">
+            <img
+                style="display: none;"
+                class="preview-image"
+                src="2.jpg"
+            />
+        </picture>
+    </div>
+    <div class="previewImage" data-index="9">
+        <picture id="previewContainer9">
+            <img
+                style="display: none;"
+                class="preview-image"
+                src="10.jpg"
+            />
+        </picture>
+    </div>
+ </div>
 <script src="pinchzoom.js?v=1"></script>
+<script src="mgallery.js?v=1"></script>
 <script>
+    initMGallery();
     initPinchZoom(document.querySelector('.pz'));
 </script>
 </body>
