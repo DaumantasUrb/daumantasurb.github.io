@@ -4,6 +4,14 @@ function initPinchZoom(element) {
     let endTouches = [];
     let startDistance = 0;
     let endDistance = 0;
+    /** disable default touch behavior except for pinch zoom  */
+    element.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+    element.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+    element.addEventListener('touchend', e => e.preventDefault(), { passive: false });
+    element.addEventListener('touchcancel', e => e.preventDefault(), { passive: false });
+    element.addEventListener('wheel', e => e.preventDefault(), { passive: false });
+    element.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+    element.addEventListener('contextmenu', e => e.preventDefault(), { passive: false });
 
     function getDistance(touches) {
         const [x1, y1] = [touches[0].clientX, touches[0].clientY];

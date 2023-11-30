@@ -22,6 +22,22 @@ function showPreview(imageId) {
     expandedGallery.classList.remove('hide');
     var collapsedGallery = document.querySelector('.collapsedGallery');
     collapsedGallery.classList.add('hide');
+
+    /** remove active class from all preview items */
+    var previewItems = document.querySelectorAll('.previewImage');
+    previewItems.forEach(function(el) {
+        el.classList.remove('active');
+    });
+    /** add class to that preview item */
+    var previewItem = document.querySelector('.previewImage[data-index="' + imageId + '"]');
+    previewItem.classList.add('active');
+    /** scroll to that preview item */
+    var previewItemOffset = previewItem.offsetLeft;
+    var previewItemWidth = previewItem.offsetWidth;
+    var previewContainerWidth = previewContainer.offsetWidth;
+    var previewContainerOffset = previewContainer.offsetLeft;
+    var scrollLeft = previewItemOffset - previewContainerOffset - (previewContainerWidth / 2) + (previewItemWidth / 2);
+    previewContainer.scrollLeft = scrollLeft;
 }
 
 function showCollapsedGallery() {
