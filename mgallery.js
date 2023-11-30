@@ -112,7 +112,8 @@ function setupSwipeGallery() {
     }
 
     function canSwipe() {
-        const currentImageElement = gallery.children[index].querySelector('img');
+        const currentImageElement = gallery.children[index].querySelector('picture');
+        console.log(currentImageElement);
         return !currentImageElement.isZoomed();
     }
 

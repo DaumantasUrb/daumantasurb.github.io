@@ -33,6 +33,12 @@ function initPinchZoom(element) {
     }
 
     function getScale() {
+        console.log('endDistance', endDistance);
+        console.log('startDistance', startDistance);
+        if (startDistance == 0) {
+            return 1;
+        }
+
         return endDistance / startDistance;
     }
 
@@ -42,9 +48,8 @@ function initPinchZoom(element) {
     }
 
     function handleGesture() {
-        if (canSwipe()) {
-            const scale = currentScale * getScale();
-            element.style.transform = getTransform(scale);
+        const scale = currentScale * getScale();
+        element.style.transform = getTransform(scale);
     }
 
     function handleTouchStart(e) {
@@ -70,24 +75,32 @@ function initPinchZoom(element) {
     });
 
     element.addEventListener('touchend', () => {
+        console.log(currentScale);
         currentScale *= getScale(); // Store the cumulative scale
+        console.log(currentScale);
         element.style.transform = getTransform(currentScale); // Apply the final scale
     });
 
     element.addEventListener('touchcancel', () => {
+        console.log(currentScale);
         currentScale *= getScale();
+        console.log(currentScale);
         element.style.transform = getTransform(currentScale);
     });
 
     element.addEventListener('wheel', e => {
         e.preventDefault();
+        console.log(currentScale);
         currentScale = Math.min(Math.max(0.125, currentScale - e.deltaY / 1000), 4);
+        console.log(currentScale);
         element.style.transform = getTransform(currentScale);
     });
 
     element.addEventListener('dblclick', e => {
         e.preventDefault();
+        console.log(currentScale);
         currentScale = 1; // Reset scaling
+        console.log(currentScale);
         element.style.transformOrigin = '0 0'; // Reset transform origin
         element.style.transform = getTransform(currentScale);
     });
