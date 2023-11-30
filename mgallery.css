@@ -1,0 +1,145 @@
+.mgallery-element {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    min-height: 200px;
+}
+
+.lazy-spinner {
+    height: 200px;
+}
+
+.object-images.expandedGallery {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 10px;
+}
+
+.expandedGallery .video-container,
+.expandedGallery .mgallery-3d iframe {
+    width: 100%;
+    max-height: 600px;
+    height: 100%;
+    /** prevent user being stuck inside 3d tour without ability to scroll out*/
+    max-height: 75vh;
+}
+
+.mgallery-element.mgallery-3d {
+    height: 600px;
+}
+
+.previewable-image {
+    cursor: pointer;
+}
+
+.previewGallery {
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 99999;
+    left:0;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: 100%;
+    background: #0a0a0a;
+}
+
+.previewGallery .previewImage {
+    background: #0a0a0a;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    display: flex; /* Remove any default spacing */
+    position: relative;
+}
+
+.previewGallery .previewImage {
+    object-fit: contain;
+}
+
+.previewGallery ~ .controlsOverlay {
+    /** takes entire screen */
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 999999;
+    display: block;
+    position: fixed;
+    background: transparent;
+}
+
+.previewGallery.touched ~ .controlsOverlay,
+.previewGallery.hide ~ .closeOverlay,
+.previewGallery.hide ~ .controlsOverlay {
+    display: none;
+}
+
+.controlsOverlay {
+    pointer-events: none;
+}
+.controlsOverlay .zoom {
+    background-image: url(/static/svg/mgallery/maximize.svg);
+    height: 100px;
+    top: 50%;
+    width: 100px;
+    background-color: hsla(0,0%,100%,.5);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    cursor: pointer;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    z-index: 999999;
+}
+
+.controlsOverlay .slide {
+    background-image: url(/static/svg/mgallery/slide.svg);
+    background-color: hsla(0,0%,100%,.5);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    cursor: pointer;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    z-index: 999999;
+    bottom: 15px;
+    height: 60px;
+    width: 60px;
+}
+
+.closeOverlay {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 9999999;
+    width: 60px;
+    height: 60px;
+}
+
+.closeOverlay .close {
+    background-image: url(/static/svg/mgallery/close.svg);
+    background-color: hsla(0, 0%, 100%, 0);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    cursor: pointer;
+    position: absolute;
+    z-index: 999999;
+    top: 0;
+    right: 0;
+    height: 60px;
+    width: 60px;
+}
+
