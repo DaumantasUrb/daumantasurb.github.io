@@ -10,8 +10,21 @@ function initPinchZoom(element) {
     element.addEventListener('touchend', e => e.preventDefault(), { passive: false });
     element.addEventListener('touchcancel', e => e.preventDefault(), { passive: false });
     element.addEventListener('wheel', e => e.preventDefault(), { passive: false });
-    element.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+    //element.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
     element.addEventListener('contextmenu', e => e.preventDefault(), { passive: false });
+
+    element.isZoomed = function() {
+        return currentScale !== 1;
+    };
+
+    element.addEventListener('dblclick', e => {
+        e.preventDefault();
+        currentScale = 1; // Reset scaling
+        element.style.transformOrigin = '0 0'; // Reset transform origin
+        element.style.transform = getTransform(currentScale);
+        // When double-clicking, dispatch a custom event to inform that the image is zoomed out
+        element.dispatchEvent(new CustomEvent('zoomReset'));
+    });
 
     function getDistance(touches) {
         const [x1, y1] = [touches[0].clientX, touches[0].clientY];
@@ -29,8 +42,9 @@ function initPinchZoom(element) {
     }
 
     function handleGesture() {
-        const scale = currentScale * getScale();
-        element.style.transform = getTransform(scale);
+        if (canSwipe()) {
+            const scale = currentScale * getScale();
+            element.style.transform = getTransform(scale);
     }
 
     function handleTouchStart(e) {

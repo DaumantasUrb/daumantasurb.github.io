@@ -100,8 +100,20 @@ function setupSwipeGallery() {
     let index = 0;
 
     var images = gallery.querySelectorAll('.previewImage picture');
+
+    images.forEach(image => {
+        image.addEventListener('zoomReset', () => {
+            gallery.classList.remove('noSwipe'); // Remove a class that would prevent swiping (decide how you implement the restriction)
+        });
+    });
+
     for (let i=0;i<images.length;i++) {
         initPinchZoom(images[i]);
+    }
+
+    function canSwipe() {
+        const currentImageElement = gallery.children[index].querySelector('img');
+        return !currentImageElement.isZoomed();
     }
 
     function updateGalleryPosition() {
@@ -111,14 +123,16 @@ function setupSwipeGallery() {
     }
 
     function handleGesture() {
-        if (touchendX < touchstartX) {
-            index = Math.min(index + 1, gallery.children.length - 1);
+        if (canSwipe()) {
+            if (touchendX < touchstartX) {
+                index = Math.min(index + 1, gallery.children.length - 1);
+            }
+            if (touchendX > touchstartX) {
+                index = Math.max(index - 1, 0);
+            }
+            updateGalleryPosition();
+            showPreview(index + 1);
         }
-        if (touchendX > touchstartX) {
-            index = Math.max(index - 1, 0);
-        }
-        updateGalleryPosition();
-        showPreview(index + 1);
     }
 
     gallery.addEventListener('touchstart', e => {
