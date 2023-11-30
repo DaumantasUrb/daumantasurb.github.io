@@ -118,6 +118,7 @@ function setupSwipeGallery() {
             index = Math.max(index - 1, 0);
         }
         updateGalleryPosition();
+        showPreview(index + 1);
     }
 
     gallery.addEventListener('touchstart', e => {
