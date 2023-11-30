@@ -99,7 +99,7 @@ function setupSwipeGallery() {
     let touchendX = 0;
     let index = 0;
 
-    var images = gallery.querySelectorAll('.previewImage img');
+    var images = gallery.querySelectorAll('.previewImage picture');
     for (let i=0;i<images.length;i++) {
         initPinchZoom(images[i]);
     }
