@@ -31,7 +31,8 @@ function showPreview(imageId) {
     /** add class to that preview item */
     var previewItem = document.querySelector('.previewImage[data-index="' + imageId + '"]');
     previewItem.classList.add('active');
-    console.log('setting active ' + imageId);
+    console.log('setting active ' + imageId, previewItem);
+
     /** scroll to that preview item */
     var previewItemOffset = previewItem.offsetLeft;
     var previewItemWidth = previewItem.offsetWidth;
@@ -98,7 +99,7 @@ function setupSwipeGallery() {
     let touchendX = 0;
     let index = 0;
 
-    var images = gallery.querySelectorAll('.previewImage');
+    var images = gallery.querySelectorAll('.previewImage img');
     for (let i=0;i<images.length;i++) {
         initPinchZoom(images[i]);
     }
@@ -189,6 +190,7 @@ function initPreviewLinks() {
             var imageIndex = currEl.getAttribute('data-index');
             var previewContainer = document.querySelector('.previewGallery');
             previewContainer.classList.remove('hide');
+            showPreview(imageIndex);
             window.history.pushState({ preview: true, id: imageIndex }, '', '#galleryImage_' + imageIndex);
             return false;
         });
