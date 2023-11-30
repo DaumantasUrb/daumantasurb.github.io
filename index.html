@@ -2,7 +2,40 @@
 <body>
 <link rel="stylesheet" type="text/css" href="mgallery.css"/>
 
-<div class="object-images expandedGallery">
+
+<div class="object-images with-logo collapsedGallery">
+        <div class="thumb-element">
+            <a class="galleryLink" data-index="1">
+                <img style="width:100px;height: 100px;" class="thumb-image" src="test-1.jpg"/>
+            </a>
+        </div>
+        <div class="thumb-element">
+            <a class="galleryLink" data-index="2">
+                <img style="width:100px;height: 100px;" class="thumb-image" src="test-2.jpg"/>
+            </a>
+        </div>
+        <div class="thumb-element">
+            <a class="galleryLink" data-index="3">
+                <img style="width:100px;height: 100px;" class="thumb-image" src="test-3.jpg"/>
+            </a>
+        </div>
+        <div class="thumb-element">
+            <a class="galleryLink" data-index="4">
+                <img style="width:100px;height: 100px;" class="thumb-image" src="test-4.jpg"/>
+            </a>
+        </div>
+        <div class="thumb-element">
+            <a class="galleryLink" data-index="5">
+                <img style="width:100px;height: 100px;" class="thumb-image" src="test-5.jpg"/>
+            </a>
+        </div>
+        <div class="thumb-element">
+            <a class="galleryLink" data-index="6">
+                <img style="width:100px;height: 100px;" class="thumb-image" src="test-6.jpg"/>
+            </a>
+        </div>
+</div>
+<div class="object-images hide expandedGallery">
     <div class="mgallery-element previewable-image" data-index="1">
         <picture id="pictureContainer0">
             <img class="mgallery-image" src="test-1.jpg" alt="Placeholder - Photo no 1" title="Placeholder - Photo no 1" />
@@ -38,7 +71,7 @@
     <div class="previewImage" data-index="1">
         <picture id="previewContainer1">
             <img
-                style="display: none;"
+
                 class="preview-image"
                 src="test-1.jpg"
             />
@@ -47,7 +80,7 @@
     <div class="previewImage" data-index="2">
         <picture id="previewContainer2">
             <img
-                style="display: none;"
+
                 class="preview-image"
                 src="test-2.jpg"
             />
@@ -56,7 +89,7 @@
     <div class="previewImage" data-index="3">
         <picture id="previewContainer3">
             <img
-                style="display: none;"
+
                 class="preview-image"
                 src="test-3.jpg"
             />
@@ -65,7 +98,7 @@
     <div class="previewImage" data-index="4">
         <picture id="previewContainer4">
             <img
-                style="display: none;"
+
                 class="preview-image"
                 src="test-4.jpg"
             />
@@ -74,7 +107,7 @@
     <div class="previewImage" data-index="5">
         <picture id="previewContainer5">
             <img
-                style="display: none;"
+
                 class="preview-image"
                 src="test-5.jpg"
             />
@@ -83,7 +116,7 @@
     <div class="previewImage" data-index="6">
         <picture id="previewContainer6">
             <img
-                style="display: none;"
+
                 class="preview-image"
                 src="test-6.jpg"
             />
@@ -103,7 +136,6 @@
 <script src="mgallery.js?v=1"></script>
 <script>
     initMGallery();
-    initPinchZoom(document.querySelector('.pz'));
 </script>
 </body>
 </html>
