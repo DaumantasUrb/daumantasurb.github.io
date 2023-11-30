@@ -16,13 +16,13 @@ function showExpandedGallery() {
 }
 
 function showPreview(imageId) {
+    console.log('showPreview' + imageId);
     var previewContainer = document.querySelector('.previewGallery');
     previewContainer.classList.remove('hide');
     var expandedGallery = document.querySelector('.expandedGallery');
     expandedGallery.classList.remove('hide');
     var collapsedGallery = document.querySelector('.collapsedGallery');
     collapsedGallery.classList.add('hide');
-
     /** remove active class from all preview items */
     var previewItems = document.querySelectorAll('.previewImage');
     previewItems.forEach(function(el) {
@@ -31,6 +31,7 @@ function showPreview(imageId) {
     /** add class to that preview item */
     var previewItem = document.querySelector('.previewImage[data-index="' + imageId + '"]');
     previewItem.classList.add('active');
+    console.log('setting active ' + imageId);
     /** scroll to that preview item */
     var previewItemOffset = previewItem.offsetLeft;
     var previewItemWidth = previewItem.offsetWidth;

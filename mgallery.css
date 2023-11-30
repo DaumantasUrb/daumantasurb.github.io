@@ -66,6 +66,10 @@
     object-fit: contain;
 }
 
+.previewGallery .previewImage.active {
+    z-index: 99999999;
+}
+
 .previewGallery ~ .controlsOverlay {
     /** takes entire screen */
     width: 100%;
