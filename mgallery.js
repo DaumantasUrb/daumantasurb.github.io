@@ -52,14 +52,18 @@ function showCollapsedGallery() {
 
 function handleHashChange()
 {
+    console.log('hashChange');
     const hash = window.location.hash;
     if (hash === '#gallery') {
+        console.log('hashChange expanded');
         showExpandedGallery();
     } else if (hash.indexOf('#galleryImage_') === 0) {
         const imageId = hash.replace('#galleryImage_', '');
+        console.log('hashChange prev' + imageId);
         showPreview(imageId);
     } else {
         showCollapsedGallery();
+        console.log('hashChange collapsed');
   }
 }
 
