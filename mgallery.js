@@ -117,7 +117,6 @@ function setupSwipeGallery() {
             maxZoom: 10,
             draggableUnzoomed: false,
             onZoomStart: function (object, event) {
-                alert('zooming');
                 console.log('zoomstart');
             },
             onZoomUpdate: function (object, event) {
