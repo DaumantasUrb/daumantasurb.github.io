@@ -1,4 +1,5 @@
 /*
+
     PinchZoom.js
     Copyright (c) Manuel Stofer 2013 - today
 
@@ -932,4 +933,3 @@ var definePinchZoom = function () {
 
 var PinchZoom = definePinchZoom();
 
-export default PinchZoom;
