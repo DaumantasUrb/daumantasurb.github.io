@@ -18,10 +18,12 @@ function initPinchZoom(element) {
     };
 
     element.addEventListener('dblclick', e => {
+        console.log('dbl');
         e.preventDefault();
         currentScale = 1; // Reset scaling
         element.style.transformOrigin = '0 0'; // Reset transform origin
-        element.style.transform = getTransform(currentScale);
+        element.style.transform = 'scale(1.0)';
+
         // When double-clicking, dispatch a custom event to inform that the image is zoomed out
         element.dispatchEvent(new CustomEvent('zoomReset'));
     });
@@ -97,12 +99,13 @@ function initPinchZoom(element) {
     });
 
     element.addEventListener('dblclick', e => {
+        console.log('dblcl');
         e.preventDefault();
         console.log(currentScale);
         currentScale = 1; // Reset scaling
         console.log(currentScale);
         element.style.transformOrigin = '0 0'; // Reset transform origin
-        element.style.transform = getTransform(currentScale);
+        element.style.transform = getTransform(1.0);
     });
 
     element.addEventListener('contextmenu', e => {
