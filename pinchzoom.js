@@ -103,6 +103,8 @@ function initPinchZoom(element) {
     function isDoubleTap() {
         const currentTime = new Date().getTime();
         const tapLength = currentTime - lastTapTime;
+        console.log('tapLength', tapLength);
+
         lastTapTime = currentTime;
         return tapLength < 500 && tapLength > 0;
     }
