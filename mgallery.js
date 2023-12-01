@@ -117,6 +117,7 @@ function setupSwipeGallery() {
             maxZoom: 10,
             draggableUnzoomed: false,
             onZoomStart: function (object, event) {
+                alert('zooming');
                 console.log('zoomstart');
             },
             onZoomUpdate: function (object, event) {
@@ -133,6 +134,7 @@ function setupSwipeGallery() {
     });
 
     function canSwipe() {
+        return false;
         return true;
         return !gallery.classList.contains('noSwipe');
     }
