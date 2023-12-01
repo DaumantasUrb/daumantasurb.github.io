@@ -109,27 +109,23 @@ function setupSwipeGallery() {
 
 
 
-    images.forEach(function (value, key) {
+    var imageContainers = gallery.querySelectorAll('.previewImage');
+    imageContainers.forEach(function (value, key) {
+        console.log('init zoom for', value);
         new PinchZoom(value, {
             tapZoomFactor: 4,
             maxZoom: 10,
             draggableUnzoomed: false,
             onZoomStart: function (object, event) {
                 console.log('zoomstart');
-                //set src of big image maybe
             },
             onZoomUpdate: function (object, event) {
                 console.log('zoomUpdate');
                 gallery.classList.add('noSwipe');
-                document.querySelector('.photo-zoom-modal .swipe-helper').classList.add('hide');
-                document.querySelector('.photo-zoom-modal .zoom-helper').classList.add('hide');
 
             },
             onDoubleTap: function (object, event) {
                 console.log('dbltap');
-                //hide swipe and zoom help-icons
-                document.querySelector('.photo-zoom-modal .swipe-helper').classList.add('hide');
-                document.querySelector('.photo-zoom-modal .zoom-helper').classList.add('hide');
                 gallery.classList.remove('noSwipe');
             },
         });
@@ -137,6 +133,7 @@ function setupSwipeGallery() {
     });
 
     function canSwipe() {
+        return true;
         return !gallery.classList.contains('noSwipe');
     }
 
