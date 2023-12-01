@@ -98,15 +98,36 @@ function initPinchZoom(element) {
         element.style.transform = getTransform(currentScale);
     });
 
-    element.addEventListener('dblclick', e => {
-        console.log('dblcl');
+    let lastTapTime = 0;
+
+    function isDoubleTap() {
+        const currentTime = new Date().getTime();
+        const tapLength = currentTime - lastTapTime;
+        lastTapTime = currentTime;
+        return tapLength < 500 && tapLength > 0;
+    }
+
+    element.addEventListener('dblclick', function(e) {
+        console.log('dblclick');
         e.preventDefault();
+        resetScaleAndTransform();
+    });
+
+    element.addEventListener('touchend', function(e) {
+        if (isDoubleTap()) {
+            console.log('double-tap');
+            e.preventDefault();
+            resetScaleAndTransform();
+        }
+    });
+
+    function resetScaleAndTransform() {
         console.log(currentScale);
         currentScale = 1; // Reset scaling
         console.log(currentScale);
         element.style.transformOrigin = '0 0'; // Reset transform origin
         element.style.transform = getTransform(1.0);
-    });
+    }
 
     element.addEventListener('contextmenu', e => {
         e.preventDefault();
