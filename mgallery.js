@@ -109,7 +109,7 @@ function setupSwipeGallery() {
 
 
 
-    var imageContainers = gallery.querySelectorAll('.previewImage');
+    var imageContainers = gallery.querySelectorAll('.previewImage img');
     imageContainers.forEach(function (value, key) {
         console.log('init zoom for', value);
         new PinchZoom(value, {
