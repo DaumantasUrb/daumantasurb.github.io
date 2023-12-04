@@ -1,0 +1,123 @@
+<html>
+<body>
+    <div class="debug"></div>
+<div class=" previewGallery">
+    <div class="previewImage" data-index="1">
+        <picture id="previewContainer1">
+            <img
+
+                class="preview-image"
+                src="test-1.jpg"
+            />
+        </picture>
+    </div>
+ </div>
+
+<style>
+.debug {
+    font-size: 32px ;
+    position: fixed;
+    top: 0;
+    height:100vh;
+    width: 100vw;
+    pointer-events: none;
+    left: 50px;
+    z-index: 1000;
+    background: rgba(255,255,255,0.5);
+    color: red;
+    font-weight: bold;
+    overflow:visible;
+}
+
+.previewGallery {
+    border: 1px solid blue;
+}
+.previewImage {
+    border: 1px solid red;
+}
+.previewImage picture {
+    border: 1px solid orange;
+}
+
+</style>
+<script>
+/** disable default zoom events, add custom super minimal pinch zoom */
+function copyTouch({ identifier, pageX, pageY }) {  return { identifier, pageX, pageY, dir:0 }; }
+
+function startup() {
+    var previewGallery = document.querySelector('.previewGallery');
+    previewGallery.addEventListener('touchstart', handleStart, {passive:false});
+    previewGallery.addEventListener('touchend', handleEnd, {passive:false});
+    previewGallery.addEventListener('touchcancel', handleEnd, {passive:false});
+    previewGallery.addEventListener('touchmove', handleMove, {passive:false});
+}
+
+function parseTwoFingerTouch(evt) {
+    var absx = Math.abs(evt.touches[0].pageX - evt.touches[1].pageX);
+    var absy = Math.abs(evt.touches[0].pageY - evt.touches[1].pageY);
+    var abstotal = absx + absy;
+    return {
+        x: evt.touches[0].pageX,
+        y: evt.touches[0].pageY,
+        x2: evt.touches[1].pageX,
+        y2: evt.touches[1].pageY,
+        absx,
+        absy,
+        abstotal: absx + absy,
+    }
+}
+
+function writeDebug() {
+    write('ft:' + Math.round(firstTouches == null ? 0 : firstTouches.abstotal) + ';st:' + Math.round(secondTouches == null ? 0 : secondTouches.abstotal));
+}
+
+var firstTouches = null;
+var secondTouches = null;
+function handleStart(evt) {
+    evt.preventDefault();
+    if (evt.touches.length > 1) {
+        var absx = Math.abs(evt.touches[0].pageX - evt.touches[1].pageX);
+        var absy = Math.abs(evt.touches[0].pageY - evt.touches[1].pageY);
+        var abstotal = absx + absy;
+        firstTouches = parseTwoFingerTouch(evt);
+        writeDebug();
+        return;
+    } else {
+        firstTouches = null;
+    }
+}
+
+function handleMove(evt) {
+    if (evt.touches.length > 1 && firstTouches != null) {
+        secondTouches = parseTwoFingerTouch(evt);
+        writeDebug();
+    }
+}
+
+function handleEnd(evt) {
+    firstTouches = null;
+    secondTouches = null;
+}
+
+var scale = 1;
+function updateZoom(xDiff, yDiff) {
+
+
+    scale = scale + ((xDiff-yDiff) / 500);
+
+    var previewImage = document.querySelector('.previewImage');
+    previewImage.style.transform = 'scale(' + scale + ')';    previewImage.style.left = '0';
+}
+
+
+
+function write(text) {
+    document.querySelector('.debug').innerHTML = text;
+}
+
+startup();
+
+
+</script>
+</body>
+</html>
