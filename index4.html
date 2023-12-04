@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Touch Zoom Image</title>
+<style>
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Disable scroll on page */
+}
+#zoom-img-container {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    touch-action: none; /* Disable default touch behaviours like scrolling */
+}
+#zoom-img {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease; /* Smooth zoom transition */
+}
+</style>
+</head>
+<body>
+
+<div id="zoom-img-container">
+    <img id="zoom-img" src="test-0.jpg" alt="Zoomable Image">
+</div>
+
+<script>
+const container = document.getElementById('zoom-img-container');
+const zoomableImg = document.getElementById('zoom-img');
+let zoomLevel = 1;
+let lastTouchEnd = 0;
+
+function setZoom(pointX, pointY, newZoomLevel) {
+    const rect = container.getBoundingClientRect();
+    const offsetX = (pointX - rect.left) / rect.width * 100;
+    const offsetY = (pointY - rect.top) / rect.height * 100;
+
+    zoomableImg.style.transformOrigin = `${offsetX}% ${offsetY}%`;
+    zoomableImg.style.transform = `scale(${newZoomLevel})`;
+    zoomLevel = newZoomLevel;
+}
+
+container.addEventListener('touchstart', (event) => {
+    if(event.touches.length === 1) {
+        // Single touch: initialize for potential zoom
+        const touch = event.touches[0];
+        const pointX = touch.pageX;
+        const pointY = touch.pageY;
+
+        setZoom(pointX, pointY, zoomLevel < 8 ? zoomLevel * 2 : 1);
+    }
+}, false);
+
+let initialDistance = 0;
+
+container.addEventListener('touchmove', (event) => {
+    event.preventDefault();
+    if (event.touches.length === 2) {
+        // Pinch zoom
+        const touch1 = event.touches[0];
+        const touch2 = event.touches[1];
+
+        const currentDistance = Math.hypot(
+            touch1.pageX - touch2.pageX,
+            touch1.pageY - touch2.pageY
+        );
+
+        if(initialDistance === 0) {
+            initialDistance = currentDistance;
+        } else {
+            const scale = currentDistance / initialDistance;
+            const newZoomLevel = Math.min(Math.max(zoomLevel * scale, 1), 8);
+
+            setZoom(
+                (touch1.pageX + touch2.pageX) / 2,
+                (touch1.pageY + touch2.pageY) / 2,
+                newZoomLevel
+            );
+        }
+    }
+}, false);
+
+container.addEventListener('touchend', (event) => {
+    // Prevent quick double-taps that could lead to zoom-in issues
+    const now = (new Date()).getTime();
+    if(now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+
+    // Reset initialDistance for next touch move
+    initialDistance = 0;
+}, false);
+
+</script>
+</body>
+</html>
+

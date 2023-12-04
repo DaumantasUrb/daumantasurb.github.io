@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zoom Image on Click</title>
+<style>
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Disable scroll on page */
+}
+#zoom-img-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+#zoom-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease; /* Smooth zoom transition */
+    cursor: zoom-in;
+}
+</style>
+</head>
+<body>
+
+<div id="zoom-img-container" onclick="zoomImage(event)">
+    <img id="zoom-img" src="test-0.jpg" alt="Zoomable Image">
+</div>
+
+<script>
+const container = document.querySelector('#zoom-img-container');
+const zoomableImg = document.querySelector('#zoom-img');
+let zoomLevel = 1;
+
+function zoomImage(event) {
+    const rect = container.getBoundingClientRect();
+
+    // Calculate the position clicked relative to the image
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    // Update zoom level up to 8x
+    zoomLevel = zoomLevel < 8 ? zoomLevel * 2 : 1;
+
+    const offsetX = (x / rect.width) * 100;
+    const offsetY = (y / rect.height) * 100;
+
+    if (zoomLevel > 1) {
+        // If zooming in, position the image based on where the user clicked
+        zoomableImg.style.transformOrigin = `${offsetX}% ${offsetY}%`;
+    } else {
+        // If zooming out, reset to default center position
+        zoomableImg.style.transformOrigin = 'center center';
+    }
+
+    zoomableImg.style.transform = `scale(${zoomLevel})`;
+}
+
+</script>
+</body>
+</html>
