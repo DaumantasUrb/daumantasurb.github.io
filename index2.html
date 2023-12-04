@@ -23,7 +23,8 @@
     left: 50px;
     z-index: 1000;
     background: rgba(255,255,255,0.5);
-    color: white;
+    color: black;
+    tex-shadow: 1px 1px 1px white;
     font-weight: bold;
     overflow:visible;
 }
@@ -48,6 +49,8 @@ var scale = 1;
 var maxScale = 10;
 var minScale = 1;
 var tempScale = 1;
+var transformOrigin = '';
+var prevMid = null;
 startup();
 
 function startup() {
@@ -75,14 +78,23 @@ function parseTwoFingerTouch(evt) {
 
 function writeDebug() {
     write(
-        'ft:'
+        'ftx:'
+        + Math.round(firstTouch == null ? 0 : firstTouch.x)
+        + ';fty:'
+        + Math.round(firstTouch == null ? 0 : firstTouch.y)
+        /**
+        + 'ft:'
         + Math.round(firstTouch == null ? 0 : firstTouch.abstotal)
         + ';st:'
         + Math.round(secondTouch == null ? 0 : secondTouch.abstotal)
+        */
+        + '<br>'
         + ';scale:'
         + scale
         + ';tempScale:'
         + tempScale
+        + ';to:'
+        + transformOrigin
     );
 }
 function handleStart(evt) {
@@ -108,11 +120,10 @@ function handleEnd(evt) {
     if (evt.touches.length < 2) {
         if (tempScale != 1) {
             scale = tempScale;
+            tempScale = 1;
+            firstTouch = null;
+            secondTouch = null;
         }
-
-        tempScale = 1;
-        firstTouch = null;
-        secondTouch = null;
     }
 }
 
@@ -132,18 +143,31 @@ function updateZoomOnMove() {
     }
 
     if (tempScale == 1) {
+        prevMid = null;
         scale = 1;
     }
 
-    /** get mid point of secondTouch */
     var midx = (firstTouch.x + firstTouch.x2) / 2;
     var midy = (firstTouch.y + firstTouch.y2) / 2;
 
 
     var previewImage = document.querySelector('.previewImage');
     previewImage.style.transform = 'scale(' + tempScale + ')';
-    transformOrigin = Math.round(midx)+ 'px ' + Math.round(midy) + 'px';
-    previewImage.style.transformOrigin = transformOrigin;
+    /** handle zooming first time */
+    if (prevMid == null || true) {
+        transformOrigin = Math.round(midx) + 'px ' + Math.round(midy) + 'px';
+        previewImage.style.transformOrigin = transformOrigin;
+    /** handle repeat zoom */
+    } else {
+        var diffx = midx - (prevMid.x / scale);
+        var diffy = midy - (prevMid.y / scale);
+
+        prevMid = {x: diffx, y: diffy};
+        transformOrigin = Math.round(diffx) + 'px ' + Math.round(diffy) + 'px';
+        previewImage.style.transformOrigin = transformOrigin;
+    }
+
+    prevMid = {x: midx, y: midy};
 }
 
 
