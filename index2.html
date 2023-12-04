@@ -157,17 +157,22 @@ function updateZoomOnMove() {
     if (prevMid == null) {
         transformOrigin = Math.round(midx) + 'px ' + Math.round(midy) + 'px';
         previewImage.style.transformOrigin = transformOrigin;
+        prevMid = {x: midx, y: midy};
     /** handle repeat zoom */
     } else {
-        var diffx = (2 * midx) - prevMid.x;
-        var diffy = (2 * midy) - prevMid.y;
+        const rect = previewGallery.getBoundingClientRect();
+        const offsetX = (midx - rect.left) / rect.width * 100;
+        const offsetY = (midy - rect.top) / rect.height * 100;
 
-        prevMid = {x: diffx, y: diffy};
-        transformOrigin = Math.round(diffx) + 'px ' + Math.round(diffy) + 'px';
-        previewImage.style.transformOrigin = transformOrigin;
+        previewImage.style.transformOrigin = `${offsetX}% ${offsetY}%`;
+        previewImage.style.transform = `scale(${tempScale})`;
+
+        prevMid = {x: offsetX, y: offsetY};
+        var objectPosX = Math.round(offsetX) + 'px';
+        var objectPosY = Math.round(offsetY) + 'px';
+        transformOrigin = objectPosX + ' ' + objectPosY;
+        previewImage.style.objectPosition = transformOrigin;
     }
-
-    prevMid = {x: midx, y: midy};
 }
 
 
