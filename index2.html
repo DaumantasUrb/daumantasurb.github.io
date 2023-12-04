@@ -1,6 +1,5 @@
 <html>
-<body>
-    <div class="debug"></div>
+<body> <div class="debug"></div>
 <div class=" previewGallery">
     <div class="previewImage" data-index="1">
         <picture id="previewContainer1">
@@ -15,7 +14,7 @@
 
 <style>
 .debug {
-    font-size: 32px ;
+    font-size: 36px ;
     position: fixed;
     top: 0;
     height:100vh;
@@ -24,7 +23,7 @@
     left: 50px;
     z-index: 1000;
     background: rgba(255,255,255,0.5);
-    color: red;
+    color: white;
     font-weight: bold;
     overflow:visible;
 }
@@ -42,7 +41,14 @@
 </style>
 <script>
 /** disable default zoom events, add custom super minimal pinch zoom */
-function copyTouch({ identifier, pageX, pageY }) {  return { identifier, pageX, pageY, dir:0 }; }
+
+var firstTouch = null;
+var secondTouch = null;
+var scale = 1;
+var maxScale = 10;
+var minScale = 1;
+var tempScale = 1;
+startup();
 
 function startup() {
     var previewGallery = document.querySelector('.previewGallery');
@@ -68,55 +74,82 @@ function parseTwoFingerTouch(evt) {
 }
 
 function writeDebug() {
-    write('ft:' + Math.round(firstTouches == null ? 0 : firstTouches.abstotal) + ';st:' + Math.round(secondTouches == null ? 0 : secondTouches.abstotal));
+    write(
+        'ft:'
+        + Math.round(firstTouch == null ? 0 : firstTouch.abstotal)
+        + ';st:'
+        + Math.round(secondTouch == null ? 0 : secondTouch.abstotal)
+        + ';scale:'
+        + scale
+        + ';tempScale:'
+        + tempScale
+    );
 }
-
-var firstTouches = null;
-var secondTouches = null;
 function handleStart(evt) {
     evt.preventDefault();
     if (evt.touches.length > 1) {
-        var absx = Math.abs(evt.touches[0].pageX - evt.touches[1].pageX);
-        var absy = Math.abs(evt.touches[0].pageY - evt.touches[1].pageY);
-        var abstotal = absx + absy;
-        firstTouches = parseTwoFingerTouch(evt);
+        firstTouch = parseTwoFingerTouch(evt);
         writeDebug();
         return;
     } else {
-        firstTouches = null;
+        firstTouch = null;
     }
 }
 
 function handleMove(evt) {
-    if (evt.touches.length > 1 && firstTouches != null) {
-        secondTouches = parseTwoFingerTouch(evt);
+    if (evt.touches.length > 1 && firstTouch != null) {
+        secondTouch = parseTwoFingerTouch(evt);
         writeDebug();
+        updateZoomOnMove();
     }
 }
 
 function handleEnd(evt) {
-    firstTouches = null;
-    secondTouches = null;
+    if (evt.touches.length < 2) {
+        if (tempScale != 1) {
+            scale = tempScale;
+        }
+
+        tempScale = 1;
+        firstTouch = null;
+        secondTouch = null;
+    }
 }
 
-var scale = 1;
-function updateZoom(xDiff, yDiff) {
+function updateZoomOnMove() {
+    if (firstTouch == null || secondTouch == null) {
+        return;
+    }
 
+    tempScale = scale * (secondTouch.abstotal / firstTouch.abstotal);
+    tempScale = tempScale.toFixed(2);
+    if (tempScale > maxScale) {
+        tempScale = maxScale;
+    }
 
-    scale = scale + ((xDiff-yDiff) / 500);
+    if (tempScale < minScale) {
+        tempScale = minScale;
+    }
+
+    if (tempScale == 1) {
+        scale = 1;
+    }
+
+    /** get mid point of secondTouch */
+    var midx = (firstTouch.x + firstTouch.x2) / 2;
+    var midy = (firstTouch.y + firstTouch.y2) / 2;
+
 
     var previewImage = document.querySelector('.previewImage');
-    previewImage.style.transform = 'scale(' + scale + ')';    previewImage.style.left = '0';
+    previewImage.style.transform = 'scale(' + tempScale + ')';
+    transformOrigin = Math.round(midx)+ 'px ' + Math.round(midy) + 'px';
+    previewImage.style.transformOrigin = transformOrigin;
 }
-
 
 
 function write(text) {
     document.querySelector('.debug').innerHTML = text;
 }
-
-startup();
-
 
 </script>
 </body>
