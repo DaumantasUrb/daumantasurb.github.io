@@ -154,13 +154,13 @@ function updateZoomOnMove() {
     var previewImage = document.querySelector('.previewImage');
     previewImage.style.transform = 'scale(' + tempScale + ')';
     /** handle zooming first time */
-    if (prevMid == null || true) {
+    if (prevMid == null) {
         transformOrigin = Math.round(midx) + 'px ' + Math.round(midy) + 'px';
         previewImage.style.transformOrigin = transformOrigin;
     /** handle repeat zoom */
     } else {
-        var diffx = midx - (prevMid.x / scale);
-        var diffy = midy - (prevMid.y / scale);
+        var diffx = (2 * midx) - prevMid.x;
+        var diffy = (2 * midy) - prevMid.y;
 
         prevMid = {x: diffx, y: diffy};
         transformOrigin = Math.round(diffx) + 'px ' + Math.round(diffy) + 'px';
