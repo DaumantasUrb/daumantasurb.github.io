@@ -115,27 +115,33 @@ function setupSwipeGallery() {
         });
     });
 
-
+    function onZoomUpdateOrEnd(object, event) {
+        write('scale ' + object.zoomFactor, true);
+        if (object.zoomFactor == 1) {
+            enableSwipe();
+        } else {
+            disableSwipe();
+        }
+    }
 
     var imageContainers = gallery.querySelectorAll('.previewImage');
     imageContainers.forEach(function (value, key) {
-        write('init zoom for ' + key);
+        write('init zoom for ' + key, true);
         try {
-            new PinchZoom(value, {
+            var pz = new PinchZoom(value, {
                 tapZoomFactor: 4,
                 maxZoom: 10,
+                animationDuration: 0,
+                maxZoom: 8,
+                minZoom: 1,
                 draggableUnzoomed: false,
                 onZoomStart: function (object, event) {
-                    write('zoomstart;', true)
+                    disableSwipe();
                 },
-                onZoomUpdate: function (object, event) {
-                    write('zoomupdate;', true)
-                    gallery.classList.add('noSwipe');
-
-                },
+                onZoomUpdate: onZoomUpdateOrEnd,
+                onZoomEnd: onZoomUpdateOrEnd,
                 onDoubleTap: function (object, event) {
-                    write('dbltap;', true)
-                    gallery.classList.remove('noSwipe');
+                    //enableSwipe();
                 },
             });
         } catch (e) {
@@ -144,9 +150,19 @@ function setupSwipeGallery() {
 
     });
 
+    function disableSwipe()
+    {
+        gallery.classList.add('noSwipe');
+        write('disableSwipe', true);
+    }
+
+    function enableSwipe()
+    {
+        gallery.classList.remove('noSwipe');
+        write('enableSwipe', true);
+    }
+
     function canSwipe() {
-        return false;
-        return true;
         return !gallery.classList.contains('noSwipe');
     }
 
@@ -164,6 +180,8 @@ function setupSwipeGallery() {
             if (touchendX > touchstartX) {
                 index = Math.max(index - 1, 0);
             }
+
+            write('swipe to ' + index, true);
             updateGalleryPosition();
             showPreview(index + 1);
         }
