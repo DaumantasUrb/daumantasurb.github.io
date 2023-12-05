@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head lang="lt">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="lt" />
+</head>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+<body>
+<link rel="stylesheet" type="text/css" href="mgallery.css"/>
+<style>
+.debug {
+    font-size: 16px;
+    position: fixed;
+    top: 0;
+    height:100vh;
+    width: 100vw;
+    pointer-events: none;
+    left: 50px;
+    z-index: 1000;
+    background: rgba(255,255,255,0.5);
+    color: black;
+    tex-shadow: 1px 1px 1px white;
+    font-weight: bold;
+    overflow:visible;
+    z-index: 999999999;
+}
+</style>
+
+<div class="debug"></div>
+<div class="object-images with-logo collapsedGallery">
+        <div class="thumb-element">
+            <a class="galleryLink" data-index="1">
+                <img style="width:100px;height: 100px;" class="thumb-image" src="test-1.jpg"/>
+            </a>
+        </div>
+        <div class="thumb-element">
+            <a class="galleryLink" data-index="2">
+                <img style="width:100px;height: 100px;" class="thumb-image" src="test-2.jpg"/>
+            </a>
+        </div>
+        <div class="thumb-element">
+            <a class="galleryLink" data-index="3">
+                <img style="width:100px;height: 100px;" class="thumb-image" src="test-3.jpg"/>
+            </a>
+        </div>
+        <div class="thumb-element">
+            <a class="galleryLink" data-index="4">
+                <img style="width:100px;height: 100px;" class="thumb-image" src="test-4.jpg"/>
+            </a>
+        </div>
+        <div class="thumb-element">
+            <a class="galleryLink" data-index="5">
+                <img style="width:100px;height: 100px;" class="thumb-image" src="test-5.jpg"/>
+            </a>
+        </div>
+        <div class="thumb-element">
+            <a class="galleryLink" data-index="6">
+                <img style="width:100px;height: 100px;" class="thumb-image" src="test-6.jpg"/>
+            </a>
+        </div>
+</div>
+<div class="object-images hide expandedGallery">
+    <div class="mgallery-element previewable-image" data-index="1">
+        <picture id="pictureContainer0">
+            <img class="mgallery-image" src="test-1.jpg" alt="Placeholder - Photo no 1" title="Placeholder - Photo no 1" />
+        </picture>
+    </div>
+    <div class="mgallery-element previewable-image" data-index="2">
+        <picture id="pictureContainer0">
+            <img class="mgallery-image" src="test-2.jpg" alt="Placeholder - Photo no 1" title="Placeholder - Photo no 1" />
+        </picture>
+    </div>
+    <div class="mgallery-element previewable-image" data-index="3">
+        <picture id="pictureContainer0">
+            <img class="mgallery-image" src="test-3.jpg" alt="Placeholder - Photo no 1" title="Placeholder - Photo no 1" />
+        </picture>
+    </div>
+    <div class="mgallery-element previewable-image" data-index="4">
+        <picture id="pictureContainer0">
+            <img class="mgallery-image" src="test-4.jpg" alt="Placeholder - Photo no 1" title="Placeholder - Photo no 1" />
+        </picture>
+    </div>
+    <div class="mgallery-element previewable-image" data-index="5">
+        <picture id="pictureContainer0">
+            <img class="mgallery-image" src="test-5.jpg" alt="Placeholder - Photo no 1" title="Placeholder - Photo no 1" />
+        </picture>
+    </div>
+    <div class="mgallery-element previewable-image" data-index="6">
+        <picture id="pictureContainer0">
+            <img class="mgallery-image" src="test-6.jpg" alt="Placeholder - Photo no 1" title="Placeholder - Photo no 1" />
+        </picture>
+    </div>
+</div>
+<div class="hide previewGallery">
+    <div class="previewImage" data-index="1">
+        <picture id="previewContainer1">
+            <img
+
+                class="preview-image"
+                src="test-1.jpg"
+            />
+        </picture>
+    </div>
+    <div class="previewImage" data-index="2">
+        <picture id="previewContainer2">
+            <img
+
+                class="preview-image"
+                src="test-2.jpg"
+            />
+        </picture>
+    </div>
+    <div class="previewImage" data-index="3">
+        <picture id="previewContainer3">
+            <img
+
+                class="preview-image"
+                src="test-3.jpg"
+            />
+        </picture>
+    </div>
+    <div class="previewImage" data-index="4">
+        <picture id="previewContainer4">
+            <img
+
+                class="preview-image"
+                src="test-4.jpg"
+            />
+        </picture>
+    </div>
+    <div class="previewImage" data-index="5">
+        <picture id="previewContainer5">
+            <img
+
+                class="preview-image"
+                src="test-5.jpg"
+            />
+        </picture>
+    </div>
+    <div class="previewImage" data-index="6">
+        <picture id="previewContainer6">
+            <img
+
+                class="preview-image"
+                src="test-6.jpg"
+            />
+        </picture>
+    </div>
+
+ </div>
+
+<div class="controlsOverlay">
+    <div class="zoom"></div>
+    <div class="slide"></div>
+</div>
+<div class="closeOverlay">
+    <div class="close"></div>
+</div>
+<script src="pinchzoom2.js?v=3"></script>
+<script src="mgallery.js?v=3"></script>
+<script>
+    initMGallery();
+</script>
+<script>
+</script>
+</body>
+</html>
