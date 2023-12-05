@@ -1,4 +1,11 @@
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head lang="lt">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="lt" />
+</head>
 <body> <div class="debug"></div>
 <div class=" previewGallery">
     <div class="previewImage" data-index="1">
@@ -120,7 +127,7 @@ function handleEnd(evt) {
     if (evt.touches.length < 2) {
         if (tempScale != 1) {
             scale = tempScale;
-            tempScale = 1;
+            //tempScale = 1;
             firstTouch = null;
             secondTouch = null;
         }

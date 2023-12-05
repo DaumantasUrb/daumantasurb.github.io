@@ -1,3 +1,11 @@
+function write(text, append = false) {
+    if (append) {
+        text = text + '<br>' + document.querySelector('.debug').innerHTML;
+    }
+
+    document.querySelector('.debug').innerHTML = text;
+}
+
 function initMGallery() {
     window.addEventListener("load", initExpandGallery, false);
     window.addEventListener("load", initPreviewLinks, false);
@@ -109,26 +117,30 @@ function setupSwipeGallery() {
 
 
 
-    var imageContainers = gallery.querySelectorAll('.previewImage img');
+    var imageContainers = gallery.querySelectorAll('.previewImage');
     imageContainers.forEach(function (value, key) {
-        console.log('init zoom for', value);
-        new PinchZoom(value, {
-            tapZoomFactor: 4,
-            maxZoom: 10,
-            draggableUnzoomed: false,
-            onZoomStart: function (object, event) {
-                console.log('zoomstart');
-            },
-            onZoomUpdate: function (object, event) {
-                console.log('zoomUpdate');
-                gallery.classList.add('noSwipe');
+        write('init zoom for ' + key);
+        try {
+            new PinchZoom(value, {
+                tapZoomFactor: 4,
+                maxZoom: 10,
+                draggableUnzoomed: false,
+                onZoomStart: function (object, event) {
+                    write('zoomstart;', true)
+                },
+                onZoomUpdate: function (object, event) {
+                    write('zoomupdate;', true)
+                    gallery.classList.add('noSwipe');
 
-            },
-            onDoubleTap: function (object, event) {
-                console.log('dbltap');
-                gallery.classList.remove('noSwipe');
-            },
-        });
+                },
+                onDoubleTap: function (object, event) {
+                    write('dbltap;', true)
+                    gallery.classList.remove('noSwipe');
+                },
+            });
+        } catch (e) {
+            alert(e);
+        }
 
     });
 

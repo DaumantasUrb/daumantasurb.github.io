@@ -1,10 +1,35 @@
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head lang="lt">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="lt" />
+</head>
 <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
 <body>
 <link rel="stylesheet" type="text/css" href="mgallery.css"/>
+<style>
+.debug {
+    font-size: 16px;
+    position: fixed;
+    top: 0;
+    height:100vh;
+    width: 100vw;
+    pointer-events: none;
+    left: 50px;
+    z-index: 1000;
+    background: rgba(255,255,255,0.5);
+    color: black;
+    tex-shadow: 1px 1px 1px white;
+    font-weight: bold;
+    overflow:visible;
+    z-index: 999999999;
+}
+</style>
 
-
+<div class="debug"></div>
 <div class="object-images with-logo collapsedGallery">
         <div class="thumb-element">
             <a class="galleryLink" data-index="1">
@@ -138,6 +163,8 @@
 <script src="mgallery.js?v=3"></script>
 <script>
     initMGallery();
+</script>
+<script>
 </script>
 </body>
 </html>

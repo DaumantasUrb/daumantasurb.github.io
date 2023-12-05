@@ -1,144 +1,136 @@
-function initPinchZoom(element) {
-    let currentScale = 1;
-    let startTouches = [];
-    let endTouches = [];
-    let startDistance = 0;
-    let endDistance = 0;
-    /** disable default touch behavior except for pinch zoom  */
-    element.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
-    element.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
-    element.addEventListener('touchend', e => e.preventDefault(), { passive: false });
-    element.addEventListener('touchcancel', e => e.preventDefault(), { passive: false });
-    element.addEventListener('wheel', e => e.preventDefault(), { passive: false });
-    //element.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
-    element.addEventListener('contextmenu', e => e.preventDefault(), { passive: false });
+var firstTouch = null;
+var secondTouch = null;
+var scale = 1;
+var maxScale = 10;
+var minScale = 1;
+var tempScale = 1;
+var transformOrigin = '';
+var prevMid = null;
+initPinchZoom();
 
-    element.isZoomed = function() {
-        return currentScale !== 1;
-    };
-
-    element.addEventListener('dblclick', e => {
-        console.log('dbl');
-        e.preventDefault();
-        currentScale = 1; // Reset scaling
-        element.style.transformOrigin = '0 0'; // Reset transform origin
-        element.style.transform = 'scale(1.0)';
-
-        // When double-clicking, dispatch a custom event to inform that the image is zoomed out
-        element.dispatchEvent(new CustomEvent('zoomReset'));
-    });
-
-    function getDistance(touches) {
-        const [x1, y1] = [touches[0].clientX, touches[0].clientY];
-        const [x2, y2] = [touches[1].clientX, touches[1].clientY];
-        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-    }
-
-    function getScale() {
-        console.log('endDistance', endDistance);
-        console.log('startDistance', startDistance);
-        if (startDistance == 0) {
-            return 1;
-        }
-
-        return endDistance / startDistance;
-    }
-
-    function getTransform(scale) {
-        // Apply the cumulative scale
-        return `scale(${scale})`;
-    }
-
-    function handleGesture() {
-        const scale = currentScale * getScale();
-        element.style.transform = getTransform(scale);
-    }
-
-    function handleTouchStart(e) {
-        if (e.touches.length >= 2) {
-            startTouches = e.touches;
-            startDistance = getDistance(startTouches);
-            // Calculate the center of the pinch gesture
-            const touchCenterX = (startTouches[0].clientX + startTouches[1].clientX) / 2;
-            const touchCenterY = (startTouches[0].clientY + startTouches[1].clientY) / 2;
-            // Adjust the transform origin to the center of the pinch
-            element.style.transformOrigin = `${touchCenterX}px ${touchCenterY}px`;
-        }
-    }
-
-    element.addEventListener('touchstart', handleTouchStart);
-
-    element.addEventListener('touchmove', e => {
-        if (e.touches.length >= 2) {
-            endTouches = e.touches;
-            endDistance = getDistance(endTouches);
-            handleGesture();
-        }
-    });
-
-    element.addEventListener('touchend', () => {
-        console.log(currentScale);
-        currentScale *= getScale(); // Store the cumulative scale
-        console.log(currentScale);
-        element.style.transform = getTransform(currentScale); // Apply the final scale
-    });
-
-    element.addEventListener('touchcancel', () => {
-        console.log(currentScale);
-        currentScale *= getScale();
-        console.log(currentScale);
-        element.style.transform = getTransform(currentScale);
-    });
-
-    element.addEventListener('wheel', e => {
-        e.preventDefault();
-        console.log(currentScale);
-        currentScale = Math.min(Math.max(0.125, currentScale - e.deltaY / 1000), 4);
-        console.log(currentScale);
-        element.style.transform = getTransform(currentScale);
-    });
-
-    let lastTapTime = 0;
-
-    function isDoubleTap() {
-        const currentTime = new Date().getTime();
-        const tapLength = currentTime - lastTapTime;
-        console.log('tapLength', tapLength);
-
-        lastTapTime = currentTime;
-        return tapLength < 500 && tapLength > 0;
-    }
-
-    element.addEventListener('dblclick', function(e) {
-        console.log('dblclick');
-        e.preventDefault();
-        resetScaleAndTransform();
-    });
-
-    element.addEventListener('touchend', function(e) {
-        if (isDoubleTap()) {
-            console.log('double-tap');
-            e.preventDefault();
-            resetScaleAndTransform();
-        }
-    });
-
-    function resetScaleAndTransform() {
-        console.log(currentScale);
-        currentScale = 1; // Reset scaling
-        console.log(currentScale);
-        element.style.transformOrigin = '0 0'; // Reset transform origin
-        element.style.transform = getTransform(1.0);
-    }
-
-    element.addEventListener('contextmenu', e => {
-        e.preventDefault();
-    });
-
-    // Apply initial transform
-    element.style.transformOrigin = '0 0';
-    element.style.transform = getTransform(currentScale);
-
-    return element;
+function initPinchZoom() {
+    var previewGallery = document.querySelector('.previewGallery');
+    previewGallery.addEventListener('touchstart', handleStart, {passive:false});
+    previewGallery.addEventListener('touchend', handleEnd, {passive:false});
+    previewGallery.addEventListener('touchcancel', handleEnd, {passive:false});
+    previewGallery.addEventListener('touchmove', handleMove, {passive:false});
 }
 
+function parseTwoFingerTouch(evt) {
+    var absx = Math.abs(evt.touches[0].pageX - evt.touches[1].pageX);
+    var absy = Math.abs(evt.touches[0].pageY - evt.touches[1].pageY);
+    var abstotal = absx + absy;
+    return {
+        x: evt.touches[0].pageX,
+        y: evt.touches[0].pageY,
+        x2: evt.touches[1].pageX,
+        y2: evt.touches[1].pageY,
+        absx,
+        absy,
+        abstotal: absx + absy,
+    }
+}
+
+function writeDebug() {
+    write(
+        'ftx:'
+        + Math.round(firstTouch == null ? 0 : firstTouch.x)
+        + ';fty:'
+        + Math.round(firstTouch == null ? 0 : firstTouch.y)
+        /**
+        + 'ft:'
+        + Math.round(firstTouch == null ? 0 : firstTouch.abstotal)
+        + ';st:'
+        + Math.round(secondTouch == null ? 0 : secondTouch.abstotal)
+        */
+        + '<br>'
+        + ';scale:'
+        + scale
+        + ';tempScale:'
+        + tempScale
+        + ';to:'
+        + transformOrigin
+    );
+}
+function handleStart(evt) {
+    evt.preventDefault();
+    if (evt.touches.length > 1) {
+        firstTouch = parseTwoFingerTouch(evt);
+        writeDebug();
+        return;
+    } else {
+        firstTouch = null;
+    }
+}
+
+function handleMove(evt) {
+    if (evt.touches.length > 1 && firstTouch != null) {
+        secondTouch = parseTwoFingerTouch(evt);
+        writeDebug();
+        updateZoomOnMove();
+    }
+}
+
+function handleEnd(evt) {
+    if (evt.touches.length < 2) {
+        if (tempScale != 1) {
+            scale = tempScale;
+            //tempScale = 1;
+            firstTouch = null;
+            secondTouch = null;
+        }
+    }
+}
+
+function updateZoomOnMove() {
+    if (firstTouch == null || secondTouch == null) {
+        return;
+    }
+
+    tempScale = scale * (secondTouch.abstotal / firstTouch.abstotal);
+    tempScale = tempScale.toFixed(2);
+    if (tempScale > maxScale) {
+        tempScale = maxScale;
+    }
+
+    if (tempScale < minScale) {
+        tempScale = minScale;
+    }
+
+    if (tempScale == 1) {
+        prevMid = null;
+        scale = 1;
+    }
+
+    var midx = (firstTouch.x + firstTouch.x2) / 2;
+    var midy = (firstTouch.y + firstTouch.y2) / 2;
+
+
+    var previewImage = document.querySelector('.previewImage');
+    previewImage.style.transform = 'scale(' + tempScale + ')';
+    /** handle zooming first time */
+    if (prevMid == null) {
+        transformOrigin = Math.round(midx) + 'px ' + Math.round(midy) + 'px';
+        previewImage.style.transformOrigin = transformOrigin;
+        prevMid = {x: midx, y: midy};
+    /** handle repeat zoom */
+    } else {
+        const rect = previewGallery.getBoundingClientRect();
+        const offsetX = (midx - rect.left) / rect.width * 100;
+        const offsetY = (midy - rect.top) / rect.height * 100;
+
+        previewImage.style.transformOrigin = `${offsetX}% ${offsetY}%`;
+        previewImage.style.transform = `scale(${tempScale})`;
+
+        prevMid = {x: offsetX, y: offsetY};
+        var objectPosX = Math.round(offsetX) + 'px';
+        var objectPosY = Math.round(offsetY) + 'px';
+        transformOrigin = objectPosX + ' ' + objectPosY;
+        previewImage.style.objectPosition = transformOrigin;
+    }
+}
+
+
+function write(text) {
+    document.querySelector('.debug').innerHTML = text;
+}

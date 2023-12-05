@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head lang="lt">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="lt" />
+</head>
+<body> <div class="debug"></div>
+<div class=" previewGallery">
+    <div class="previewImage" data-index="1">
+        <img
+
+            class="preview-image"
+            src="test-1.jpg"
+        />
+    </div>
+ </div>
+
+<style>
+.debug {
+    font-size: 36px ;
+    position: fixed;
+    top: 0;
+    height:100vh;
+    width: 100vw;
+    pointer-events: none;
+    left: 50px;
+    z-index: 1000;
+    background: rgba(255,255,255,0.5);
+    color: black;
+    tex-shadow: 1px 1px 1px white;
+    font-weight: bold;
+    overflow:visible;
+}
+
+.previewGallery {
+    border: 1px solid blue;
+}
+.previewImage {
+    border: 1px solid red;
+}
+.previewImage picture {
+    border: 1px solid orange;
+}
+
+</style>
+<script src="pinchzoom2.js"></script>
+<script>
+    var myImg = document.querySelector('.previewImage');
+    new PinchZoom(myImg);
+
+</script>
+
+</html>
